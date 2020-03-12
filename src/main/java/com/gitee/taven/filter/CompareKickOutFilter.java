@@ -2,6 +2,8 @@ package com.gitee.taven.filter;
 
 import com.gitee.taven.utils.JWTUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.redisson.api.RBucket;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +13,10 @@ import javax.servlet.http.HttpServletResponse;
  * 比较时间戳
  */
 public class CompareKickOutFilter extends KickOutFilter {
+
+    /** logger */
+    private static final Logger logger = LogManager.getLogger(CompareKickOutFilter.class);
+
     @Override
     public boolean isAccessAllowed(HttpServletRequest request, HttpServletResponse response) {
         String token = request.getHeader("Authorization");
@@ -38,7 +44,7 @@ public class CompareKickOutFilter extends KickOutFilter {
                 // 注销当前token
                 userService.logout(token);
                 sendJsonResponse(response, 4001, "您的账号已在其他设备登录");
-                System.out.println("您的账号已在其他设备登录");
+                logger.info("日志记录结果: {}" , "您的账号已在其他设备登录");
                 return false;
 
             }
